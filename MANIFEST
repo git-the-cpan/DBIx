@@ -1,0 +1,9 @@
+Changes
+DBH.pm
+DBIx.pm
+Makefile.PL
+MANIFEST
+t/02_make_table.t
+t/03_populate_table.t
+t/04_sql_on_table.t
+t/99_drop_table.t
