@@ -35,7 +35,7 @@ our @EXPORT = qw(
 		 rollback_transaction
 		 hung_transactions
 		);
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 
 # Preloaded methods go here.
@@ -374,6 +374,35 @@ data cannot be retrieved, e.g:
 
    my $row  = one_row_href 'SELECT * FROM user WHERE email = ?', $email;
   $row or die "no user has email $email";
+
+Oh and one more thing. I will discuss how database handles are found 
+so that the API functions can actually do database work.
+
+=head2 LOOKING UP DATABASE HANDLES
+
+All API functions shown in the SYNOPSIS actually take an argument just 
+after the function name which must be a viable DBI database handle.
+However, this argument is optional and if it does not exist then a search is
+made for a database handle as follows:
+
+=over 4
+
+=item 1 it looks in the current package for a package wariable C<$DBH>
+
+=item 2 it looks in the for a package wariable C<$DBIx::DBH>
+
+=back
+
+Thus the following call: 
+
+ my $col  = one_col       $sql, @bind ;
+
+which performs the documented lookup described above could actually be:
+
+ my $col  = one_col       $dbh, $sql, @bind ;
+
+and eliminate the lookup.
+
 
 =head2 EXPORT
 
